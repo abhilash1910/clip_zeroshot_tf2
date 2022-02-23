@@ -218,6 +218,9 @@ class ModifiedResNet(keras.Model):
 
 class LayerNorm(tf.keras.layers.LayerNormalization):
     
+    """
+    Uses keras layer norm implementation
+    """
     def __init__(self, name="LayerNorm"):
         super(LayerNorm, self).__init__(epsilon=1e-05, name=name)
 
@@ -225,6 +228,10 @@ class LayerNorm(tf.keras.layers.LayerNormalization):
         return super().call(x)
     
 class QuickGELU(tf.keras.layers.Layer):
+    
+    """
+    Uses tensorflow nn gelu backend
+    """
     
     def __init__(self, name="QuickGELU"):
         super(QuickGELU, self).__init__(name=name)
@@ -234,6 +241,12 @@ class QuickGELU(tf.keras.layers.Layer):
         return tf.nn.gelu(x)
 
 class ResidualAttentionBlock(tf.keras.layers.Layer):
+    
+    """
+    Residual attention module which uses keras MHSA followed by 
+    Sequential model of layernorm and Dense layers
+    """
+    
     def __init__(self, d_model: int, n_head: int, attn_mask: tf.Tensor = None, name="ResidualAttentionBlock", idx=0):
         super().__init__(name=name)
         self.idx = idx
@@ -272,6 +285,11 @@ class ResidualAttentionBlock(tf.keras.layers.Layer):
 
 
 class Transformer(keras.Model):
+    
+    """
+    Default Transformer class which uses Residual Attention Block
+    """
+    
     def __init__(self, width: int, layers: int, heads: int, attn_mask: tf.Tensor = None, name="transformer"):
         super().__init__(name=name)
         self.width = width
